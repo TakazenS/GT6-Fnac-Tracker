@@ -1,0 +1,8 @@
+.env
+state.json
+browser_profile/
+.venv/
+__pycache__/
+*.pyc
+GTA6-Tracker.zip
+.idea/
