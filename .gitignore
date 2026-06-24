@@ -5,6 +5,7 @@ browser_profile/
 __pycache__/
 *.pyc
 GTA6-Tracker.zip
+GTA6-Tracker-Source.zip
 .idea/
 build/
 dist/
