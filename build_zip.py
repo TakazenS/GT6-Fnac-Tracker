@@ -17,6 +17,7 @@ FILES = [
     ".env.example",
     "Installer.bat",
     "Start.bat",
+    "Uninstaller.bat",
     "LICENSE",
 ]
 
