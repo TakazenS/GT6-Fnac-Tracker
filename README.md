@@ -191,6 +191,21 @@ These are created by the wizard, but you can edit them by hand:
 
 ---
 
+## 🗑️ Uninstall
+
+Double-click **`Uninstaller.bat`**. It removes the locally installed components
+(`.venv`, `browser_profile/`, `state.json`, `__pycache__`, the build zip) after
+a confirmation, and asks separately before deleting your `.env` (email/password).
+
+Two things it does **not** delete automatically (the script tells you about
+them at the end):
+- the shared Chromium downloaded by Playwright, in `%LOCALAPPDATA%\ms-playwright`;
+- any Windows scheduled task you created — remove it from Task Scheduler.
+
+Once done, you can simply delete the project folder.
+
+---
+
 ## 🛠️ For developers
 
 Build the distributable zip locally:
@@ -220,6 +235,7 @@ git push origin v1.0.0   # triggers the release build
 |---|---|
 | `Installer.bat` | One-click installation |
 | `Start.bat` | One-click launch |
+| `Uninstaller.bat` | One-click uninstall |
 | `gta6_tracker.py` | The main script |
 | `build_zip.py` | Builds the distributable zip |
 | `.env.example` | Configuration template |
