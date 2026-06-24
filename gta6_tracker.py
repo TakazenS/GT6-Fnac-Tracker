@@ -42,17 +42,34 @@ except ImportError:
     def load_dotenv(*_args, **_kwargs) -> bool:
         return False
 
-load_dotenv()
-
 
 # --------------------------------------------------------------------------
 # Configuration
 # --------------------------------------------------------------------------
-BASE_DIR = Path(__file__).resolve().parent
-STATE_FILE = BASE_DIR / "state.json"
-ENV_FILE = BASE_DIR / ".env"
+def _data_dir() -> Path:
+    """Where user data (.env, state, browser profile) is stored.
+
+    - As a normal script: next to the .py file (unchanged behavior).
+    - As a frozen .exe (installed via the installer): in %APPDATA%\\GTA6-Tracker,
+      because the install folder may not be writable.
+    """
+    if getattr(sys, "frozen", False):
+        base = os.getenv("APPDATA") or str(Path.home())
+        directory = Path(base) / "GTA6-Tracker"
+    else:
+        directory = Path(__file__).resolve().parent
+    directory.mkdir(parents=True, exist_ok=True)
+    return directory
+
+
+DATA_DIR = _data_dir()
+STATE_FILE = DATA_DIR / "state.json"
+ENV_FILE = DATA_DIR / ".env"
 # Persistent browser profile (keeps cookies, including DataDome's).
-BROWSER_PROFILE_DIR = BASE_DIR / "browser_profile"
+BROWSER_PROFILE_DIR = DATA_DIR / "browser_profile"
+
+# Load configuration from the .env located in the data directory.
+load_dotenv(ENV_FILE)
 
 # Terms searched on Fnac. Several are tried to maximize the chances.
 SEARCH_TERMS = ["GTA 6", "Grand Theft Auto VI", "GTA VI", "Grand Theft Auto 6"]

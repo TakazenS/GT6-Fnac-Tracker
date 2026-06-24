@@ -6,3 +6,6 @@ __pycache__/
 *.pyc
 GTA6-Tracker.zip
 .idea/
+build/
+dist/
+installer_output/

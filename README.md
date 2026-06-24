@@ -41,8 +41,17 @@ as the game is spotted. No more refreshing the page yourself!
 
 ## 📥 Download
 
-Grab the latest **`GTA6-Tracker.zip`** from the
-[**Releases**](../../releases) page, then unzip it anywhere.
+From the [**Releases**](../../releases) page, pick one:
+
+- **`GTA6-Tracker-Setup.exe`** — recommended for most people. A real Windows
+  installer: no Python needed, creates shortcuts and a proper entry in
+  *Add/Remove Programs*. **Requires Google Chrome.**
+- **`GTA6-Tracker.zip`** — for users who prefer the Python route (run
+  `Installer.bat` / `Start.bat`). Needs Python installed.
+
+> ℹ️ The installer is **not code-signed**, so Windows SmartScreen may show an
+> "unknown publisher" warning — click *More info → Run anyway*. Your antivirus
+> may also flag it (a common false positive for this kind of tool).
 
 ---
 
@@ -51,8 +60,8 @@ Grab the latest **`GTA6-Tracker.zip`** from the
 | Software | Detail |
 |---|---|
 | **Windows** | The project targets Windows |
-| **Python 3.10+** | Install from [python.org](https://www.python.org/downloads/) — **tick "Add python.exe to PATH"** during installation |
-| **Google Chrome** | Recommended (otherwise a fallback browser is downloaded) |
+| **Google Chrome** | Required for the installer (.exe); recommended for the zip too |
+| **Python 3.10+** | Only for the **zip** route — install from [python.org](https://www.python.org/downloads/) and **tick "Add python.exe to PATH"** |
 | **An email account** | Gmail (or another provider) to receive the alerts |
 
 ---
@@ -193,16 +202,18 @@ These are created by the wizard, but you can edit them by hand:
 
 ## 🗑️ Uninstall
 
-Double-click **`Uninstaller.bat`**. It removes the locally installed components
-(`.venv`, `browser_profile/`, `state.json`, `__pycache__`, the build zip) after
-a confirmation, and asks separately before deleting your `.env` (email/password).
+**Installed with the `.exe`?** Uninstall it like any program: *Settings →
+Apps → GTA 6 Tracker → Uninstall* (or the Start Menu "Uninstall" shortcut).
+Your data in `%APPDATA%\GTA6-Tracker` can be deleted manually afterwards.
 
-Two things it does **not** delete automatically (the script tells you about
-them at the end):
+**Used the `.zip`?** Double-click **`Uninstaller.bat`**. It removes the locally
+installed components (`.venv`, `browser_profile/`, `state.json`, `__pycache__`,
+the build zip) after a confirmation, and asks separately before deleting your
+`.env` (email/password).
+
+Two things neither method deletes automatically:
 - the shared Chromium downloaded by Playwright, in `%LOCALAPPDATA%\ms-playwright`;
 - any Windows scheduled task you created — remove it from Task Scheduler.
-
-Once done, you can simply delete the project folder.
 
 ---
 
@@ -214,17 +225,26 @@ Build the distributable zip locally:
 py build_zip.py     # creates GTA6-Tracker.zip
 ```
 
-Releases are built automatically by GitHub Actions
-([`.github/workflows/release.yml`](.github/workflows/release.yml)):
+Build the Windows installer locally (needs [Inno Setup](https://jrsoftware.org/isdl.php)):
 
-- **Push a tag** like `v1.0.0` → a GitHub Release is published with
-  `GTA6-Tracker.zip` attached.
-- **Run the workflow manually** (Actions tab) → the zip is uploaded as a build
-  artifact.
+```powershell
+py -m pip install pyinstaller
+pyinstaller --noconfirm GTA6-Tracker.spec
+ISCC.exe /DMyAppVersion=1.1.0 installer.iss   # creates installer_output\GTA6-Tracker-Setup.exe
+```
+
+Releases are built automatically by GitHub Actions. **Pushing a tag** like
+`v1.1.0` triggers both workflows:
+
+- [`release.yml`](.github/workflows/release.yml) → attaches `GTA6-Tracker.zip`
+- [`installer.yml`](.github/workflows/installer.yml) → attaches
+  `GTA6-Tracker-Setup.exe`
+
+Both also run on demand from the **Actions** tab (uploading build artifacts).
 
 ```bash
-git tag v1.0.0
-git push origin v1.0.0   # triggers the release build
+git tag v1.1.0
+git push origin v1.1.0   # triggers the release builds
 ```
 
 ---
@@ -238,9 +258,12 @@ git push origin v1.0.0   # triggers the release build
 | `Uninstaller.bat` | One-click uninstall |
 | `gta6_tracker.py` | The main script |
 | `build_zip.py` | Builds the distributable zip |
+| `GTA6-Tracker.spec` | PyInstaller build spec (the `.exe`) |
+| `installer.iss` | Inno Setup script (the `Setup.exe`) |
 | `.env.example` | Configuration template |
 | `requirements.txt` | Python dependencies |
 | `.github/workflows/release.yml` | Automatic zip/release workflow |
+| `.github/workflows/installer.yml` | Automatic installer build workflow |
 
 ---
 
