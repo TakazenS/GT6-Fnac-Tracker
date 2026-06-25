@@ -29,6 +29,8 @@ OutputBaseFilename=GTA6-Tracker-Setup
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
+; Icon shown for the installer/uninstaller executable itself.
+SetupIconFile=assets\icons\GTA6-Tracker-Setup.ico
 UninstallDisplayName={#MyAppName}
 UninstallDisplayIcon={app}\{#MyAppExeName}
 

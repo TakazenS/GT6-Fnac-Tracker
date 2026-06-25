@@ -34,7 +34,7 @@ exe = EXE(
     name="GTA6-Tracker",
     console=True,
     disable_windowed_traceback=False,
-    icon=None,
+    icon="assets/icons/GTA6-Tracker.ico",
 )
 
 coll = COLLECT(
